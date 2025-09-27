@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: meu-politico-api
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: cd backend && npm ci
+    startCommand: cd backend && node app.js
+    autoDeploy: true
+    healthCheckPath: /health
+    disk:
+      name: data
+      mountPath: /opt/render/project/src/backend/data
+      sizeGB: 1
+    envVars:
+      - key: ADMIN_KEY
+        sync: false
+      - key: CAMARA_BASE
+        value: https://dadosabertos.camara.leg.br/api/v2
+      - key: SENADO_BASE
+        value: https://legis.senado.leg.br/dadosabertos
+      - key: GNEWS_KEY
+        sync: false
+      - key: TWITTER_BEARER
+        sync: false
+      - key: YT_KEY
+        sync: false
+      - key: IG_ACCESS_TOKEN
+        sync: false
+  - type: static
+    name: meu-politico-site
+    buildCommand: echo "no build"
+    staticPublishPath: frontend
+    autoDeploy: true
